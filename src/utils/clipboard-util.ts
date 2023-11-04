@@ -25,7 +25,6 @@ export class ClipboardUtil {
       if (image !== null && image.length > 0 && image !== previousData) {
         previousData = image;
         store.add(image);
-        console.log(image);
       }
 
       await delay(1000);

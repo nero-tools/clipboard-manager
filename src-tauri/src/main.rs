@@ -1,6 +1,8 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+use std::env;
+
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu};
 use tauri::{GlobalShortcutManager, Manager};
 
@@ -57,17 +59,35 @@ fn main() {
                 api.prevent_exit();
             }
             tauri::RunEvent::Ready => {
-                let app_handle = _app_handle.clone();
-                app_handle
-                    .global_shortcut_manager()
-                    .register("CmdOrCtrl+1", move || {
-                        let window = app_handle.get_window("main").unwrap();
-                        window.show().unwrap();
-                        let _ = window.set_focus();
-                        let _ = window.set_always_on_top(true);
-                    })
-                    .unwrap();
+                if !is_linux_wayland() {
+                    let app_handle = _app_handle.clone();
+                    app_handle
+                        .global_shortcut_manager()
+                        .register("CmdOrCtrl+1", move || {
+                            let window = app_handle.get_window("main").unwrap();
+                            window.show().unwrap();
+                            let _ = window.set_focus();
+                            let _ = window.set_always_on_top(true);
+                        })
+                        .unwrap();
+                }
             }
             _ => {}
         });
+}
+
+#[cfg(target_os = "linux")]
+fn is_linux_wayland() -> bool {
+    if let Some(session_type) = env::var("XDG_SESSION_TYPE").ok() {
+        if session_type == "wayland" {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+#[cfg(not(target_os = "linux"))]
+fn is_linux_wayland() -> bool {
+    return false;
 }
