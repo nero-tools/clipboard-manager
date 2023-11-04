@@ -26,6 +26,7 @@ fn main() {
                 let window = app.get_window("main").unwrap();
                 window.show().unwrap();
                 let _ = window.set_focus();
+                let _ = window.set_always_on_top(true);
             }
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
                 "quit" => {
@@ -47,6 +48,7 @@ fn main() {
             }
             _ => {}
         })
+        .plugin(tauri_plugin_clipboard::init())
         .invoke_handler(tauri::generate_handler![greet])
         .build(tauri::generate_context!())
         .expect("error while building tauri application")
@@ -62,6 +64,7 @@ fn main() {
                         let window = app_handle.get_window("main").unwrap();
                         window.show().unwrap();
                         let _ = window.set_focus();
+                        let _ = window.set_always_on_top(true);
                     })
                     .unwrap();
             }

@@ -15,14 +15,25 @@ function App() {
       <ul>
         {store.history.map((e) => (
           <li>
-            <button
-              onClick={(_) => {
-                void ClipboardUtil.write(e);
-                void appWindow.hide();
-              }}
-            >
-              {e}
-            </button>
+            {(e.startsWith("data:image") && (
+              <div
+                onClick={(_) => {
+                  void ClipboardUtil.writeImage(e);
+                  void appWindow.hide();
+                }}
+              >
+                <img src={e}></img>
+              </div>
+            )) || (
+              <button
+                onClick={(_) => {
+                  void ClipboardUtil.writeText(e);
+                  void appWindow.hide();
+                }}
+              >
+                {e}
+              </button>
+            )}
           </li>
         ))}
       </ul>
