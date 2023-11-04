@@ -1,7 +1,7 @@
 import { useEffect } from "preact/hooks";
 import { useClipboardStore } from "./stores/clipboard-store";
 import { ClipboardUtil } from "./utils/clipboard-util";
-import { appWindow } from "@tauri-apps/api/window";
+import ClipboardEntry from "./components/clipboard-entry";
 
 function App() {
   const store = useClipboardStore();
@@ -11,32 +11,12 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <ul>
+    <div class="min-h-screen min-w-screen h-full w-full bg-[#1e1e1e] text-gray-300 select-none">
+      <div class="flex flex-col gap-2 p-3">
         {store.history.map((e) => (
-          <li>
-            {(e.startsWith("data:image") && (
-              <div
-                onClick={(_) => {
-                  void ClipboardUtil.writeImage(e);
-                  void appWindow.hide();
-                }}
-              >
-                <img src={e}></img>
-              </div>
-            )) || (
-              <button
-                onClick={(_) => {
-                  void ClipboardUtil.writeText(e);
-                  void appWindow.hide();
-                }}
-              >
-                {e}
-              </button>
-            )}
-          </li>
+          <ClipboardEntry data={e} />
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
