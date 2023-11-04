@@ -1,6 +1,7 @@
 import { useEffect } from "preact/hooks";
 import { useClipboardStore } from "./stores/clipboard-store";
 import { ClipboardUtil } from "./utils/clipboard-util";
+import { appWindow } from "@tauri-apps/api/window";
 
 function App() {
   const store = useClipboardStore();
@@ -14,7 +15,14 @@ function App() {
       <ul>
         {store.history.map((e) => (
           <li>
-            <button onClick={(_) => ClipboardUtil.write(e)}>{e}</button>
+            <button
+              onClick={(_) => {
+                void ClipboardUtil.write(e);
+                void appWindow.hide();
+              }}
+            >
+              {e}
+            </button>
           </li>
         ))}
       </ul>
