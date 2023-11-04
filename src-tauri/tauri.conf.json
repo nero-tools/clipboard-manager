@@ -18,6 +18,9 @@
         "writeText": true,
         "readText": true
       },
+      "globalShortcut": {
+        "all": true
+      },
       "shell": {
         "all": false,
         "open": true

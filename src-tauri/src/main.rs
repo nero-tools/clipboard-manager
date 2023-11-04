@@ -1,8 +1,8 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::Manager;
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu};
+use tauri::{GlobalShortcutManager, Manager};
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
@@ -53,6 +53,17 @@ fn main() {
         .run(|_app_handle, event| match event {
             tauri::RunEvent::ExitRequested { api, .. } => {
                 api.prevent_exit();
+            }
+            tauri::RunEvent::Ready => {
+                let app_handle = _app_handle.clone();
+                app_handle
+                    .global_shortcut_manager()
+                    .register("CmdOrCtrl+1", move || {
+                        let window = app_handle.get_window("main").unwrap();
+                        window.show().unwrap();
+                        let _ = window.set_focus();
+                    })
+                    .unwrap();
             }
             _ => {}
         });
