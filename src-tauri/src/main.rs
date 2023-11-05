@@ -13,8 +13,9 @@ fn greet(name: &str) -> String {
 }
 
 fn main() {
+    let open = CustomMenuItem::new("open".to_string(), "Open");
     let quit = CustomMenuItem::new("quit".to_string(), "Quit");
-    let tray_menu = SystemTrayMenu::new().add_item(quit);
+    let tray_menu = SystemTrayMenu::new().add_item(open).add_item(quit);
     let system_tray = SystemTray::new().with_menu(tray_menu);
 
     tauri::Builder::default()
@@ -31,6 +32,12 @@ fn main() {
                 let _ = window.set_always_on_top(true);
             }
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
+                "open" => {
+                    let window = app.get_window("main").unwrap();
+                    window.show().unwrap();
+                    let _ = window.set_focus();
+                    let _ = window.set_always_on_top(true);
+                }
                 "quit" => {
                     std::process::exit(0);
                 }
