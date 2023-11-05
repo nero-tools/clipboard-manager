@@ -55,7 +55,8 @@
         "resizable": true,
         "title": "clipboard-manager",
         "width": 400,
-        "height": 450
+        "height": 450,
+        "visible": false
       }
     ]
   }
