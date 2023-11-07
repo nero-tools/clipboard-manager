@@ -42,6 +42,11 @@ fn main() {
                 event.window().hide().unwrap();
                 api.prevent_close();
             }
+            tauri::WindowEvent::Focused(focus) => {
+                if !focus && !event.window().is_decorated().unwrap() {
+                    let _ = event.window().hide();
+                }
+            }
             _ => {}
         })
         .plugin(tauri_plugin_clipboard::init())
