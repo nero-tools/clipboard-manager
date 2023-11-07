@@ -26,7 +26,9 @@
         "open": true
       },
       "window": {
-        "hide": true
+        "show": true,
+        "hide": true,
+        "setFocus": true
       }
     },
     "bundle": {
@@ -50,13 +52,15 @@
     },
     "windows": [
       {
+        "alwaysOnTop": true,
         "decorations": false,
         "fullscreen": false,
-        "resizable": true,
+        "resizable": false,
         "title": "clipboard-manager",
         "width": 400,
         "height": 450,
-        "visible": false
+        "visible": false,
+        "skipTaskbar": true
       }
     ]
   }
